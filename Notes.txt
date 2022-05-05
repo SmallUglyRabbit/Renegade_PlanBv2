@@ -1,0 +1,371 @@
+Development Notes:
+Entry #1
+
+My first problem was getting playmaker to work properly after I could not figure out 
+how to make the animations work correctly. I decided to go a seperate route from youtube vid this to just access the anims directly using floats and update sensors which resulted in me actually just using a teleportation method to map out my players momvements. This was a problem because it did not interact with the colliders that I was using and I couldn't find a proper work around. 
+
+I scrapped the entire project after weeks of issues and not being able to properly get colliders to interact with the player through the Playermaker system ($65), very frustrating. 
+Then I started over and couldnt get tile palette working correctly. After a day of trying everything and 
+looking at tons of tutorials I found out, through experimentation, that I needed to set grid size to x1 y1 when creating a new palette. 
+Now I'm having control issues, the control method here doesnt want to work, or respond to key presses, unsure of why. 
+
+Control issues went away when I took the rigidbody and colliders off the tilemap, another youtuber used them, I have no idea why. It was stopping the player from moving
+instead of using unity's composite colliders and tilemap rigid bodies, I just turned that off completely. 
+Its much easier to create the interactable objects on the map custom instead of trying to hope that the collider works with the player controller.
+
+Entry #2
+when I tried to put the sprites into the UI, when I hit play they did not appear. So I changed the prefabs to 
+instead use an image file with the sprites on top of them, that worked.  
+The same thing happened for the battle circles which appeared in the scene view but not in the game view. I changed them to image files and that fixed everything. Unfortunately when I tried to custom make enemy image groupings, they show up really weird so, just scrapped that altogether for simplicity, will try again in Assignment 3. 
+
+Entry #3
+Then I had another problem adjusting tiles. On the tile palette they appeared normal size but in the scene view they appeared small. I had to adjust the pixels per unit on the 
+tile file from 100 pixels per unit to 16. Then I turned Normal compression off and it went back to normal. 
+
+Entry #4
+I want the scene to load but with all the flags that have been triggered already set. So Maybe I should 
+use static variables for those flags and have a script that checks all flags at reload and destroys
+the ones that are no longer required. I need to store the players previous position and 
+put them there again when I'm finished
+
+Instead of doing that I just created some static variables in the Globalscript and used them. Unfortunately, 
+destroying triggers tends to destroy the object I'm working with so instead I just used flags switching on
+and off to trigger conversations, much less of a headache. I can destroy the level after its complete 
+if I want to save on memory. 
+
+
+Entry #5
+When I reload, the player must be placed at 
+the last position they were when I  left them 
+in the previous scene. Perhaps a checkpoint 
+is best? No, that won't work because when
+they are getting into random battles they
+can't be returned to a checkpoint unless the battles
+are pre-planned. I instead used
+
+vector3 lastposition; 
+
+which is a static variable in the GlobalScript to record where the player was before the battlescene loads
+and returns them there later. I had to write an override script when the player starts in a new level 
+using Awake() to place then in the spot where I want them. Otherwise they show up in a spot on the map of 
+the place in the previous map that they were when they got into the battle. 
+
+https://forum.unity.com/threads/switch-scene-without-changing-reseting-anything.46782/
+
+Entry #6
+This discusses using the dontdestroyonload()
+but that makes multiple player objects, which
+is not what I want to do. 
+
+
+Entry #7
+
+https://www.youtube.com/watch?v=EnMUpV9Ueg4
+This tutorial answers that previous question.
+Now I need to disable the trigger after the battle so that the med team no longer exists around the manhole.
+I also need to add a trigger that loads the next scene of the game after the player steps on the manhole. 
+It should have a prompt that asks if the player is ready or not //Assignment3
+Then finally there will be a town for level3 which will include the ship. The player will be able to buy 
+something at the shop and proceed to the final area which is the flying saucer. It will be getting 
+attacked by another alien force. 
+
+
+
+Using playerprefs
+
+ using UnityEngine.SceneManagement; // or Unity.SceneManagement, not sure
+ 
+ PlayerPrefs.SetString("lastSceneName"); // to save current scene before loading next one
+     
+ SceneManager.LoadScene(PlayerPrefs.GetString("lastSceneName")); // load previously saved scene
+ 
+ In order to change the Enemy's image you need to goto Battle Scene Canvas -> BattleCircle-Enemy->Enemy(Clone)->EnemyImage [why did I do this?]
+ 
+ --
+ Entry #8
+ Tried to get them off the map, I mustve painted them onto the MAP layer? I don't understand because they 
+ are tied to a game object, but inactivating that game object does not cause them to dissapear. Work around
+ is that I will just switch into the next scene, that way I don't have to spend days trying to figure out 
+ why they aren't working. 
+ Work Around for the battle system, instead of trying to load in a new image, which is a major headache here. I'm going to instead write an if statement around enemyselector that Instantiates a different Enemy Prefab according to the chosen bad guy. That way I can keep all the enemy prefabs in a seperate folder and build more just by using the prefab. 
+ 
+ Accomplished this. 
+ 
+ Entry #9
+ Now I need to finish a town and a quick buying system based on the one I used in my Assignment 1 game and 
+ add a boss fight, which will be a regular fight with pumped up stats. Then add the music in and hand in. 
+ 
+ Assignment 3 will consist of: 
+ 
+ Battle Effects 
+ Colour Changes
+ Prompts for user input in text instead of waiting periods 
+ Dialog Boxes to make it easier to read
+ An Inventory screen (additive loading scene) 
+ Battle Animations 
+ NPCs to talk to 
+ Additional party members 
+ Music and sound effects during Battle 
+ A Save System using playerprefs 
+ A place for the user to enter a name for the character where it asks your name. 
+ An additional level (bought for $5 from Time Fantasy on itch.io) where the player enters
+ the ship. 
+ Additional options in battle like 'spells' or techniques ala Phantasy Star. 
+ Some battle effects on top of the character image. 
+ In the BattleScene, prompts for the player instead of automatic text scrolling 
+ Colour changes on the map, flashes, etc. 
+ Stepping sound when the character moves. 
+ Switches on the level to open barriers
+ 'Fetch Quests' 
+ More use of Levels 1 and 2, Boss Fights on both levels 
+ An Intro Screen/Scene with ability to load a saved game, options, instructions and an ABOUT page that 
+ lists all of the assets used and their cost. 
+ An instruction PDF and an enemy Legend, items etc. 
+ 
+ Entry #10
+ 
+ Re-wrote my notes so that they are legible, will include them in the build and put them in any easily 
+ accessible location on the about screen or maybe like a secret dialog between a character and an npc. 
+ I bought 1000's of dollars of assets for this project to make things quicker and ended up using almost none
+ of them. What a waste. The Playmaker issue really frustrated me because I spent weeks learning how to use
+ and code in playmaker. Then I found out that trying to pass variables between playermaker and Unity, required
+ an almost Herculean effort. Variables in Playmaker are there own thing and trying to cast them into regular Unity brings all sorts of bugs that haven't been corrected in nearly 10 years. I guess it helps if you don't 
+ know how to code but once you do, its a little bit cumbersome. I can write scripts that do the majority of the things that playmaker does. For prototyping games in VR it will be helpful, but RPG games are easier to 
+ code by hand.  I used Brackey's Pokemon battle system but when I wanted to add in my own effects, I had to go back and re-learn all the strange pieces of code that Brackey's used. That took a few days of fiddling, just to get where I am today. The interface is dog ugly so I'm hoping to fix that up in Assignment 3. Currently, running out of time in this course and need to get the rest done, by the end of the week. I'm also in Mexico 
+ at the moment and we just got over some major sickness last month, so I missed out on a ton of development time. You can plan ahead but when you are learning new ways of coding, in the end, everything breaks down
+ and all the pre-planned categories get re-written and re-worked. This game looks very different than the Action RPG that I originally had planned. I went with the Turn Based system to teach myself something new 
+ about working with Unity's SceneManager. I also wanted to learn about turn based menu systems for the UI. 
+ Finally I managed to get Brackey's ENUM states to work and they are very cool for human understanding as 
+ opposed to just using regular integers and having to look up the codes for everything in a legend. Really, 
+ the interface can be changed around very easily with a bit of time and the right assets. 
+ 
+ For my next game, I'd like to integrate a sort of Street Fighter esque sequence of key presses or joystick moves in order to kill each enemy. I wanted to make this an educational game aswell but unfortunately I didn't have the know how to create a regular RPG game, let alone one with extremely specific coding on the battle systems. I'm much more confident my 
+ 
+ 
+ followup projects will have these included. 
+ Entry #11
+ I had the same problem again with the tile palette, I even followed all my own advice and couldn't get it to work. Here is the issue: You have to change the Grid Cell Size to X:1 Y:1 Z:0 WHEN YOU CREATE THE TILE PALETTE. You can't 
+change it afterwards or it doesn't respond to the change, so you have to create an all new tile palette everytime you make this mistake. Not sure why, but that is whats going on. 
+
+
+Entry #12
+Need to implement Battle Animations in the PlayerAttack() - BattleSystem.cs 
+
+Entry #13 - March 19. 2022
+Battle Animations implemented. Now need to adjust enemy stats, player spells, combos, Heal animation. 
+Need to complete the 'town level' and add the Spaceship final dungeon
+Add MORE Npcs to speak with. [Cats, Rats, People] 
+Add BOSS BATTLES 
+Do Testplan 
+Do instructional video? 
+Do Ending Screen. 
+Add Weapons? 
+Adjust XP level so player gets access to levels faster. [Considering this is a small game meant to be played in an hour. 
+Add NPC merchants. 
+Add NPC dialogs. 
+Add NPC fights. 
+Add Loading Screen. 
+
+Test Plan Items 
+---------------
+0.  Battle System - Does leveling work?
+1.  Battle System - Hit Points Subtract when hit. 
+2.  Battle System - Missed attack ends turn 
+3.  Battle System - Battle Anims Trigger for weapons
+4.  Battle System - Mutation Anims Trigger
+5.  Battle System - Status Effects Trigger
+6.  Battle System - Status Dialog expresses corrent strings
+7.  Battle System - Sound Effects working. 
+8.  Battle System - Enemy Stats match Prefab
+9.  Battle System - Combos Trigger
+10. Battle System - Battle Text R/G/B working
+11. Battle System - Charge / Discharge working
+12. Battle System - XP / Currency Carries over to overworld 
+13. Overworld - Item Collection Working
+14. Overworld - NPCs Moving
+15. Overworld -  NPC Dialog working
+16. Overworld -  NPC triggers fights
+17. Overworld -  Random Encounter Zones working 
+18. Overworld -  Dialog working 
+19. Overworld -  Overworld Triggers working
+20. Overworld -  Data Saving / Loading properly 
+21. Overworld -  Vendor System working correctly 
+
+Plan: 
+1. Overworld finished first, story written. NPCs added. Events planned. Ending Screen. Adjust HEAL/Charge accordingly 
+2. Adjust Enemies on the battle screen, stats etc. 
+
+Entry #14. 
+Cops Dialog does not work properly. - Maybe get rid of collider zones? There is a problem with the OnScreenText object. Its generating errors for some reaosn.
+Something is wrong with StartingTriggerScript30 - Its causing all sorts of errors. 
+--Solved: Needed to add Object to level containing Global Strings (String Keeper)
+C - Does not clear screen on TOWN level. Fixed Working, can only use dialogs of already created objects.
+Changed Font to be more readable. 
+Fixed the issue with the COP's dialog not showing, the dialog object[tmp] needed to be placed on a CANVAS object. 
+Solved Weapon Animations not showing up. Required a positive Z axis. Scene it shows up regardless, but Game requires positive axis adjustment.
+
+Entry #15. 
+Solved Saving across scenes. 
+Weapon Codes 
+0. WeightSet
+1. Shovel 
+2. Star Charger Dual Tooth
+3. Star Charger Cannon
+
+Entry #16. 
+New Issue - 
+Game when loading the new scenes, saves stats but loads in original position 
+Game when cutting to battle scene, reloads level completely at the end. 
+
+Entry #17. 
+Need to fix LoadLocation() on Game Saver in the IntroScreen   Build Index 0. - Right now its just psuedo code. 
+//The idea is to assess whether this is a new game or if its an old game and load the player position and all stats accordingly. 
+Question:For some reason, the player always restarts at the same location, no matter what I do with player prefs. 
+Answer: Fixed this by using the start() on the player object to load
+this.transform.position = GlobalsScript.lastposition; 
+And the load() function in the gamesaver object to GlobalsScript.lastposition = new Vector3 (posx,posy,posz); // 
+
+Entry #18. 
+Solved the problem of battle not returning to the last position. It now saves 
+and returns to the last position, however, it does not save battle states or anything 
+accumulated and returns all of those saved stats to zero for some reason. 
+
+Entry #19. 
+Fixed the stat saving issue by reloading everything in the scene setup in the Awake() function. 
+Now I need to come up with a way of looking through the items on the level with 
+.selfactive and determining which items are on and which are off and then 
+reloading the level during the awake function and iterating through the items 
+and 0turning off each in turn. 
+
+Entry #20. 
+Fixed that but when in combat in sewer level, when out of combat, strange locations are returned
+to, doesnt make sense.
+
+Entry #21. 
+Fixed a bug that set HP in battle to 0/0. Made sure that in the first scene loaded that 
+HP now equal to 20 and then had it save. Squashed another bug that caused the battles in zone 
+2 not to load properly. The random encounter zone scripts were different and there was
+no save or gamesaver object attached to the second zone. 
+
+Entry #22. 
+Game Story Completed on April 18, 2022
+
+Somethings I wish I had done differently: 
+I found out that there really was no need to change the 'scene' 
+and I wish I had used 1 scene with several maps and teleport points. 
+I spent almost 3 months coming to grips with the PlayerPrefs Save
+system so that I could carry data between scenes. There are still
+bugs that pop up here and there and PlayerPrefs doesn't seem to be
+consistent every single time. All of this could have been avoided 
+by using one giant scene with different tilemaps painted throughout 
+the scene. 
+
+I could have been much more organized. I started out very organized 
+and in the end, it seemed like sprites/scripts and other prefabs 
+were everywhere. The problem with trying to organize and clean 
+everything is that Unity will often 'bug out' and render the code
+inoperable if certain files are not in their proper directories. 
+
+Next time I would concentrate on making one full level with 
+lots of different details and areas instead of trying to make 
+several levels. I had no idea the amount of time required to 
+put everything together. 
+
+Also It would be nice to have a pre-planned set of game objects 
+that are made into prefabs and consistent over the entire project. 
+Because I had little experience with the system for RPG games, I found
+myself writing TONS of custom scripts for every little feature. 
+There wasn't really any tutorials to follow for this type of project
+despite UNITY have tons of games. There are almost no tutorials
+for RPG's, especially JRPGs that follow a consistent pattern or 
+use code that is easy to follow. In every Youtube tutorial there 
+is something that the Author leaves out, some critical part or UNITY
+itself has changed so much that certain techniques no longer work as
+shown. I can safely say that this course and COMP369 have done 
+more for me in terms of education than anything else I've taken 
+at University. Even though this took me nearly a year to complete 
+I've gained alot of knowledge in so far as game programming and 
+the UNITY engine is concerned. I'm certain that I can use what 
+I've done on this project to put together some excellent games 
+in the future.  
+
+Additions to the first version of this game: 
+Graphics have all been upgraded. 
+Trigger Points / Story Points. 
+Audio Works. 
+Battle System overhaul - added weapons, spells, a combo system, 
+spell effects, Hit Points, Experience Points and Magic Points. 
+Money. 
+HUD display bars tracking money. 
+Saving and Loading System. 
+Stat Saving between levels. 
+The Battle System required all stats saved and positions 
+reloaded after a battle was complete (That took a long time). 
+A Story, with triggers. 
+Monster Zones / Random Encounters 
+NPCs & NPC Movement 
+Collectable objects on the map and writing a system 
+which saves after each item collected, so that 
+those items would not show up again after a battle. This was difficult. 
+Blocking out levels and adding barriers. This took a very long time. 
+Adding the intro screen and figuring out how to delete the save file. 
+For some reason it doesn't work consistently and I haven't discovered
+why exactly. 
+
+Entry 23
+Working on TOWN_OVERRIDE to get a keyword to ID if its a new level. Then 
+bringing back. Used a globalstringtext variable called Current Level to 
+change the placement when the player initializes the level. 
+
+Entry 24
+Seems that somewhere along the line, the battlescript is executing 
+the save game script and saving the current position of the player 
+which is 'in a battle', so we don't want that, we only want to use 
+the previous position of the player when the battle ends to be loaded.  
+
+Entry 25
+Found the problem. I had set a playerprefs save under SaveSceneFlags() - GameSaver.cs and it was 
+saving the current scene: and later reloading it... the current scene was the battle scene so it 
+just kept reloading the scene over and over. I added an IF statement and cleared that right up. Now
+I'm going to backtrack for the 20/0 bug and see if I can eliminate that next. 
+
+ if(GlobalsScript.SceneBuildIndex == 4)
+        {
+            Debug.Log("This is a  battle scene so no saving the current map scene here! SaveSceneAndFlags()");
+        }
+        else
+        {
+            PlayerPrefs.SetInt("CurrentMapScene",GlobalsScript.CurrentMapScene);
+        }
+        
+     
+ Save will NOT work properly in the TOWN because of this: 
+ SaveSceneAndFlags() -> the flags on the town have not been added yet because when I wrote that code
+ the level wasn't finished yet. 
+
+Entry 26
+So that wasn't it. The scene is still not saving inside the TOWN only. After a battle 
+changes the scene, the battle then dumps the player back into the sewer level at 
+the same position that the battle happened in the town level. Why is it not saving
+the scene and build index in the town? 
+
+Ok, fixed it. The reason was that I was using the INCORRECT SYNTAX and unity 
+was not telling me that it wasn't working. Here is the correct syntax. 
+
+
+        GlobalsScript.SceneBuildIndex =  SceneManager.GetActiveScene().buildIndex;
+        GlobalsScript.CurrentMapScene = SceneManager.GetActiveScene().buildIndex; 
+        
+Entry 27 
+I fixed the weapon animations. Instead of playing around with the script trying 
+to get it right. I noticed that the Animation Controller was not trigger the other 
+animations. Instead I made an Animation object for each animation and just used 
+.SetActive(true/false) when triggering the Weapon Decider() function. Now they 
+work without any issues. Thank you me. Game is content complete so far and 
+now I can present it without any issues. 
+
+Entry 28
+Added an instruction menu. Gave me issues at first because I hadn't added the text to 
+the Canvas on the Hierarchy, which made the dull text brighter. Then the graphics 
+were all out of alignment whenever I loaded up the scene. This was fixed by using 
+RAW IMAGES instead of SPRITE RENDERERS. 
